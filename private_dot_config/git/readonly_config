@@ -1,22 +1,9 @@
-[commit]
-	gpgSign = false
-
-[core]
-	hooksPath = "~/git-hooks"
-
 [credential]
 	helper = "cache --timeout=28800"
 
 [github]
 	user = "rapgru"
 
-[gpg]
-	program = "/nix/store/qj9lcl11c02fy1bf0fhggbn3r1i6b0g7-gnupg-2.4.4/bin/gpg2"
-
-[tag]
-	gpgSign = false
-
 [user]
 	email = "raphael.gruber@rapgru.com"
 	name = "Raphael Gruber"
-	signingKey = "33E39EA63DF63B0C1F50531571993D38D38EDAB3"
