@@ -13,7 +13,7 @@ if status is-interactive
     export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
     set -x LESS_ADVANCED_PREPROCESSOR 1
 
-    fzf --fish | source
+    /opt/homebrew/bin/fzf --fish | source
 end
 
 # Mise
