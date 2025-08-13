@@ -9,6 +9,8 @@ if status is-interactive
     alias cd.. "cd .."
     alias ll "ls -la"
     alias cat bat
+    alias k "kubectl"
+    alias kuc "kubectl config use-context"
 
     export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
     set -x LESS_ADVANCED_PREPROCESSOR 1
