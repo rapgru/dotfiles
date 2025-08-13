@@ -1,0 +1,71 @@
+beatport4:
+  art: true
+  password: xLaC3ervk6C2RzHSbus6JopBGWp4jD75PJqkioFo
+  source_weight: 0.0
+  username: rapgru
+directory: ~/Music/beets
+discogs:
+  source_weight: 0.3
+import:
+  incremental: true
+  log: ~/Music/beetsimport.log
+  move: true
+  write: true
+lastgenre:
+  source: artist
+library: ~/Music/beetslibrary.db
+lyrics:
+  sources:
+  - genius
+match:
+  ignored_media:
+  - Data CD
+  - DVD
+  - DVD-Video
+  - Blu-ray
+  - HD-DVD
+  - VCD
+  - SVCD
+  - UMD
+  - VHS
+  - Vinyl
+  max_rec:
+    length: strong
+    year: strong
+  preferred:
+    countries:
+    - Europe
+    - UK
+    media:
+    - Digital Media|File|Digital
+    - CD
+musicbrainz:
+  enabled: false
+  host: localhost:5000
+paths:
+  singleton: Non-Album/$artist - $title
+playlist:
+  auto: true
+  playlist_dir: ~/Music/playlists
+pluginpath:
+- ~/Music/beetsplug
+plugins: discogs beatport4 lastgenre lyrics fish check info zero playlist
+  custom_comments fetchart spotify_sync
+spotify:
+  source_weight: 1.0
+spotify_sync:
+  artist_field: artist
+  playlist_dir: /Users/rgruber/Music/playlists
+  tiebreak: first
+ui:
+  color: true
+zero:
+  fields:
+  - mb_albumartistid
+  - mb_albumid
+  - mb_artistid
+  - mb_releasegroupid
+  - mb_releasetrackid
+  - mb_trackid
+  - mb_workid
+  update_database: true
