@@ -1,6 +1,6 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
-    /opt/homebrew/bin/starship init fish | source
+    starship init fish | source
 
     alias dum1="du --max-depth=1"
     alias dum2="du --max-depth=2"
@@ -15,21 +15,23 @@ if status is-interactive
     export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
     set -x LESS_ADVANCED_PREPROCESSOR 1
 
-    /opt/homebrew/bin/fzf --fish | source
+    fzf --fish | source
 end
 
 # Mise
 mise activate fish | source
-
-# Homebrew
-/opt/homebrew/bin/brew shellenv | source
 
 # Elan (Lean)
 if test -e $HOME/.elan/env
     source $HOME/.elan/env
 end
 
+{{ if eq .chezmoi.os "darwin" }}
+# Homebrew
+brew shellenv | source
+
 # GPG Stuff
 set -x GPG_TTY (tty)
 set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
+{{ end }}

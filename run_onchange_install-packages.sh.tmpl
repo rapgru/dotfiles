@@ -1,6 +1,18 @@
 {{ if eq .chezmoi.os "linux" -}}
 #!/bin/sh
-sudo apt install ripgrep
+
+sudo apt install\
+    ripgrep\
+    vim\
+    fish\
+    starship
+    
+## MISE
+
+sudo add-apt-repository -y ppa:jdxcode/mise
+sudo apt update
+sudo apt install -y mise
+
 {{ else if eq .chezmoi.os "darwin" -}}
 #!/bin/sh
 # brew install ripgrep
