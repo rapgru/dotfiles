@@ -8,7 +8,6 @@ if status is-interactive
     alias .. "cd .."
     alias cd.. "cd .."
     alias ll "ls -la"
-    alias cat bat
     alias k "kubectl"
     alias kuc "kubectl config use-context"
 
@@ -19,18 +18,21 @@ if status is-interactive
 end
 
 # Mise
-mise activate fish | source
+if type -q mise
+    mise activate fish | source
+end
 
 # Elan (Lean)
 if test -e $HOME/.elan/env
     source $HOME/.elan/env
 end
 
-{{ if eq .chezmoi.os "darwin" }}
 # Homebrew
-brew shellenv | source
+if type -q brew
+    brew shellenv | source
+end
 
-# GPG Stuff
+{{ if has "gpg-agent" .profiles }}
 set -x GPG_TTY (tty)
 set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
