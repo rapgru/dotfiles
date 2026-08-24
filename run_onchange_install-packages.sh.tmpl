@@ -1,15 +1,17 @@
 {{ if eq .chezmoi.os "linux" -}}
 #!/bin/sh
 
-sudo apt install\
+sudo apt install -y\
     ripgrep\
-    vim\
     fish\
     starship\
     fzf\
     neovim\
     bat\
-    jq
+    jq\
+    btop\
+    oras\
+    htop\
     
 ## MISE
 
