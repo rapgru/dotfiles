@@ -15,6 +15,13 @@ if status is-interactive
     set -x LESS_ADVANCED_PREPROCESSOR 1
 
     fzf --fish | source
+    
+    set -x MANPAGER "sh -c 'col -bx | batcat -l man -p'"
+    set -x MANROFFOPT "-c"
+    
+    if type -q wslinfo
+        set -x BROWSER "wslopen"
+    end
 end
 
 # Mise
