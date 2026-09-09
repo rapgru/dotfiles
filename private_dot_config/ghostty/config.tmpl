@@ -1,4 +1,5 @@
 # -----------------------------------------------------------------------------
+{{- $ayuVariant := default "mirage" (index . "ayu_variant") -}}
 # Font Configuration
 # -----------------------------------------------------------------------------
 font-family = "FiraCode Nerd Font"
@@ -11,7 +12,7 @@ font-feature = ["calt", "liga"]
 # -----------------------------------------------------------------------------
 # Theme & Appearance
 # -----------------------------------------------------------------------------
-theme = "Ayu Mirage"
+theme = "Ayu {{ title $ayuVariant }}"
 
 # Native macOS window styling
 macos-titlebar-style = transparent

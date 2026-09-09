@@ -1,3 +1,4 @@
+{{- $ayuVariant := default "mirage" (index . "ayu_variant") -}}
 # ~/.config/tmux/tmux.conf
 
 # --- Prefix ---
@@ -45,9 +46,19 @@ set -g @plugin 'niksingh710/minimal-tmux-status'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 
+{{ if eq $ayuVariant "dark" -}}
+# Match ayu dark colors
+set -g @minimal-tmux-bg "#0b0e14"
+set -g @minimal-tmux-fg "#e6e1cf"
+{{ else if eq $ayuVariant "light" -}}
+# Match ayu light colors
+set -g @minimal-tmux-bg "#f8f9fa"
+set -g @minimal-tmux-fg "#5c6166"
+{{ else -}}
 # Match ayu mirage colors
 set -g @minimal-tmux-bg "#73d0ff"
 set -g @minimal-tmux-fg "#212733"
+{{ end -}}
 
 # ⚠️ Keep this line at the very bottom
 run '~/.config/tmux/plugins/tpm/tpm'

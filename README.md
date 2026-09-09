@@ -23,6 +23,11 @@ Any time you do changes in `nvim` like adding extras or touch a file in `~/.conf
 - Lockfile sync: `chezmoi add ~/.config/nvim/lazy-lock.json`
 - Pull on other machines `chezmoi update && nvim`
 
+### Ayu theme
+The Ghostty, Neovim, and tmux configurations share the `ayu_variant` value in
+`~/.config/chezmoi/chezmoi.toml`. Set it to `dark`, `mirage`, or `light`, then
+run `chezmoi apply` to update all three applications.
+
 ### What chezmoi does not manage
 - `~/.local/share/nvim/` — plugin code (auto-installed by lazy.nvim)
 - `~/.local/state/nvim/` — runtime state

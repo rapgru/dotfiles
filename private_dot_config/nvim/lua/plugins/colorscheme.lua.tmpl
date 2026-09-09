@@ -1,3 +1,4 @@
+{{- $ayuVariant := default "mirage" (index . "ayu_variant") -}}
 return {
   {
     "Shatur/neovim-ayu",
@@ -7,7 +8,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "ayu-mirage",
+      colorscheme = "ayu-{{ $ayuVariant }}",
     },
   },
 }
