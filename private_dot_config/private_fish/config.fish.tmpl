@@ -1,29 +1,3 @@
-if status is-interactive
-    # Commands to run in interactive sessions can go here
-    starship init fish | source
-
-    alias dum1="du --max-depth=1"
-    alias dum2="du --max-depth=2"
-
-    alias .. "cd .."
-    alias cd.. "cd .."
-    alias ll "ls -la"
-    alias k "kubectl"
-    alias kuc "kubectl config use-context"
-
-    export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
-    set -x LESS_ADVANCED_PREPROCESSOR 1
-
-    fzf --fish | source
-    
-    set -x MANPAGER "sh -c 'col -bx | batcat -l man -p'"
-    set -x MANROFFOPT "-c"
-    
-    if type -q wslinfo
-        set -x BROWSER "wslopen"
-    end
-end
-
 # Mise
 if type -q mise
     mise activate fish | source
@@ -39,8 +13,54 @@ if type -q brew
     brew shellenv | source
 end
 
+# Interactive things
+if status is-interactive
+    # Commands to run in interactive sessions can go here
+    starship init fish | source
+
+    abbr dum1 "du --max-depth=1"
+    abbr dum2 "du --max-depth=2"
+
+    abbr .. "cd .."
+    abbr cd.. "cd .."
+
+    abbr k "kubectl"
+
+    abbr cat "bat --plain"
+
+    abbr ls "eza --icons"
+    abbr ll "eza -la --icons --git"
+    abbr lt "eza -T --icons --level=2"
+
+    abbr fr "source ~/.config/fish/config.fish"
+
+    export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
+    set -x LESS_ADVANCED_PREPROCESSOR 1
+
+    fzf --fish | source
+    
+    set -x MANPAGER "sh -c 'col -bx | batcat -l man -p'"
+    set -x MANROFFOPT "-c"
+    
+    if type -q wslinfo
+        set -x BROWSER "wslopen"
+    end
+
+    # Auto-attach to tmux with a named default session
+    if not set -q TMUX
+        tmux new-session -A -s main
+    end
+
+    if type -q zoxide
+        zoxide init fish | source
+    end
+
+    fzf --fish | source
+end
+
 {{ if has "gpg-agent" .profiles }}
 set -x GPG_TTY (tty)
 set -x SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
 {{ end }}
+
