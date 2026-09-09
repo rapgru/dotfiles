@@ -1,0 +1,69 @@
+#!/bin/bash
+set -euo pipefail
+
+# Ensure brew is in PATH for this subshell
+test -x /opt/homebrew/bin/brew && eval "$(/opt/homebrew/bin/brew shellenv)"
+test -x /home/linuxbrew/.linuxbrew/bin/brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+test -x /usr/local/bin/brew && eval "$(/usr/local/bin/brew shellenv)"
+
+brew bundle --file=/dev/stdin <<EOF
+# Simple, modern, secure file encryption
+brew "age"
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
+# File comparison utilities
+brew "diffutils"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Collection of GNU find, xargs, and locate
+brew "findutils"
+# User-friendly command-line shell for UNIX-like operating systems
+brew "fish"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# Remote repository management made easy
+brew "ghq"
+# Distributed revision control system
+brew "git"
+# Improved top (interactive process viewer)
+brew "htop"
+# Display an interface's bandwidth usage
+brew "iftop"
+# JSON output from a shell
+brew "jo"
+# Pager program similar to more
+brew "less"
+# Input filter for the pager less
+brew "lesspipe"
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
+# Port scanning utility for large networks
+brew "nmap"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Utility that provides fast incremental file transfer
+brew "rsync"
+# Editor of encrypted files
+brew "sops"
+# Cross-shell prompt for astronauts
+brew "starship"
+# User interface to the TELNET protocol
+brew "telnet"
+# Internet file retriever
+brew "wget"
+# Compression and file packaging/archive utility
+brew "zip"
+
+brew "tmux"
+brew "neovim"
+brew "jq"
+brew "btop"
+brew "oras"
+brew "tealdeer"
+brew "lazygit"
+brew "unzip"
+brew "luarocks"
+brew "zoxide"
+brew "sesh"
+brew "eza"
+EOF

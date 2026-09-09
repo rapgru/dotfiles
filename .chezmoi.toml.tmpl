@@ -1,0 +1,15 @@
+{{- $email := promptStringOnce . "email" "Git email address" "raphael.gruber@rapgru.com" -}}
+{{- $gpg := promptBoolOnce . "gpg" "Enable GPG packages" false -}}
+{{- $latex := promptBoolOnce . "latex" "Install LaTeX toolchain" false -}}
+{{- $media := promptBoolOnce . "media" "Install media packages" false -}}
+{{- $k8s := promptBoolOnce . "k8s" "Install k8s packages" false -}}
+
+[git]
+    autoPush = true
+
+[data]
+    email = {{ $email | quote }}
+    gpg = {{ $gpg }}
+    latex = {{ $latex }}
+    media = {{ $media }}
+    k8s = {{ $k8s }}

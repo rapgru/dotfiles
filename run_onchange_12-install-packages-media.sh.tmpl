@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+# Ensure brew is in PATH for this subshell
+test -x /opt/homebrew/bin/brew && eval "$(/opt/homebrew/bin/brew shellenv)"
+test -x /home/linuxbrew/.linuxbrew/bin/brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+test -x /usr/local/bin/brew && eval "$(/usr/local/bin/brew shellenv)"
+
+brew bundle --file=/dev/stdin <<EOF
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
+# OCR (Optical Character Recognition) engine
+brew "tesseract"
+# Enables extra languages support for Tesseract
+brew "tesseract-lang"
+# Tools and libraries to manipulate images in select formats
+brew "imagemagick"
+# Download media from Instagram
+brew "instaloader"
+# Unified display of technical and tag data for audio/video
+brew "media-info"
+# Toolkit for 3D computer graphics, image processing, and visualization
+brew "vtk"
+# Feature-rich command-line audio/video downloader
+brew "yt-dlp"
+EOF

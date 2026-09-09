@@ -22,4 +22,4 @@ if type -q eza
   abbr lt "eza -T --icons --level=2"
 end
 
-abbr fr "source ~/.config/fish/config.fish"
+abbr fr "exec fish"

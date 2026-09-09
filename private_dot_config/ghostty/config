@@ -1,0 +1,39 @@
+# -----------------------------------------------------------------------------
+# Font Configuration
+# -----------------------------------------------------------------------------
+font-family = "FiraCode Nerd Font"
+font-size = 14`
+font-thicken = true
+
+# Ligatures are enabled by default in Ghostty
+font-feature = ["calt", "liga"]
+
+# -----------------------------------------------------------------------------
+# Theme & Appearance
+# -----------------------------------------------------------------------------
+theme = "Ayu Mirage"
+
+# Native macOS window styling
+macos-titlebar-style = transparent
+window-padding-x = 12
+window-padding-y = 10
+window-padding-balance = true
+
+# Mouse & Window behavior
+confirm-close-surface = false
+quit-after-last-window-closed = true
+
+# -----------------------------------------------------------------------------
+# macOS & Keyboard Integration (Optimized for Fish & Tmux)
+# -----------------------------------------------------------------------------
+# Treats Option/Alt as the Meta key (essential for Fish word jumps and Tmux bindings)
+macos-option-as-alt = true
+
+# Cursor configuration
+cursor-style = block
+cursor-style-blink = false
+
+# -----------------------------------------------------------------------------
+# Shell Integration
+# -----------------------------------------------------------------------------
+shell-integration = detect

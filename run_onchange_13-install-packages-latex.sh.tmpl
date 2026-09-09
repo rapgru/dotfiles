@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+
+# Ensure brew is in PATH for this subshell
+test -x /opt/homebrew/bin/brew && eval "$(/opt/homebrew/bin/brew shellenv)"
+test -x /home/linuxbrew/.linuxbrew/bin/brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+test -x /usr/local/bin/brew && eval "$(/usr/local/bin/brew shellenv)"
+
+brew bundle --file=/dev/stdin <<EOF
+# Backend processor for BibLaTeX
+brew "biber"
+# Extremely fast LaTeX formatter written in Rust
+brew "tex-fmt"
+# Free software distribution for the TeX typesetting system
+brew "texlive"
+EOF

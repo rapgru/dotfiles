@@ -1,0 +1,94 @@
+#!/bin/bash
+set -euo pipefail
+
+# Ensure brew is in PATH for this subshell
+test -x /opt/homebrew/bin/brew && eval "$(/opt/homebrew/bin/brew shellenv)"
+test -x /home/linuxbrew/.linuxbrew/bin/brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+test -x /usr/local/bin/brew && eval "$(/usr/local/bin/brew shellenv)"
+
+brew bundle --file=/dev/stdin <<EOF
+tap "docker/tap", trusted: true
+
+# GNU compiler collection
+brew "gcc"
+brew "cmake"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
+brew "clang-format"
+# GNU awk utility
+brew "gawk"
+# GNU implementation of the famous stream editor
+brew "gnu-sed"
+# GNU version of the tar archiving utility
+brew "gnu-tar"
+# GNU grep, egrep and fgrep
+brew "grep"
+# Mac App Store command-line interface
+brew "mas"
+# Pinentry for GPG on Mac
+brew "pinentry-mac"
+# Create, run, and share large language models (LLMs)
+brew "ollama", restart_service: :changed
+
+# Memory training application
+cask "anki"
+# Virtual Audio Driver
+cask "blackhole-2ch"
+# Download and manage your addons and mods
+cask "curseforge"
+# Voice and text chat software
+cask "discord"
+# Disk usage utility
+cask "disk-inventory-x"
+# App to build and share containerised applications and microservices
+cask "docker-desktop"
+# IO layer for interactive fiction players
+cask "gargoyle"
+# Update maps and software, sync with Garmin Connect and register your device
+cask "garmin-express"
+# Web browser
+cask "google-chrome"
+# Open-source video transcoder
+cask "handbrake-app"
+# Knowledge base that works on top of a local folder of plain text Markdown files
+cask "obsidian"
+# Install games and apps compiled for Microsoft Windows
+cask "porting-kit"
+# Environment for statistical computing and graphics
+cask "r-app"
+# Build, run, and govern agents across the software development lifecycle
+cask "docker/tap/sbx", trusted: true
+# File sharing network
+cask "soulseek"
+# Music streaming service
+cask "spotify"
+# Video game digital distribution service
+cask "steam"
+# Unpacks archive files
+cask "the-unarchiver"
+# Open-source code editor
+cask "visual-studio-code"
+# Multimedia player
+cask "vlc"
+cask "yubico-yubikey-manager"
+# Video communication and virtual meeting platform
+cask "zoom"
+
+cask "font-fira-code-nerd-font"
+cask "ghostty"
+
+mas "Adblock Plus", id: 1432731683
+mas "Bitwarden", id: 1352778147
+mas "BlockYT", id: 1575379461
+mas "GeoGebra Classic 6", id: 1182481622
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "NetSpot", id: 514951692
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Synctrain", id: 6553985316
+mas "Vimari", id: 1480933944
+mas "WireGuard", id: 1451685025
+mas "Yubico Authenticator", id: 1497506650
+EOF
