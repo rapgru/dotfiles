@@ -1,0 +1,3 @@
+{{- if not (has "gpg-agent" .profiles) }}
+30-gpg-agent.fish
+{{- end }}
