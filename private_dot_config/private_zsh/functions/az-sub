@@ -1,0 +1,6 @@
+# Switch the active Azure subscription with fzf
+emulate -L zsh
+local sub
+sub=$(az account list --query '[].name' -o tsv | fzf --prompt='az sub> ' --height=40%) || return
+[[ -n $sub ]] || return
+az account set --subscription "$sub"

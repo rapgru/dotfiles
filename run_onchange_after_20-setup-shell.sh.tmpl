@@ -1,0 +1,54 @@
+#!/bin/bash
+set -euo pipefail
+
+{{- $shell := default "fish" (index . "shell") }}
+
+# Desired login shell: {{ $shell }}
+# (re-renders, and therefore re-runs, whenever `shell` changes in chezmoi.toml)
+
+test -x /opt/homebrew/bin/brew && eval "$(/opt/homebrew/bin/brew shellenv)"
+test -x /home/linuxbrew/.linuxbrew/bin/brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+test -x /usr/local/bin/brew && eval "$(/usr/local/bin/brew shellenv)" || true
+
+# zsh housekeeping whenever zsh exists, not only when it is the login shell,
+# so `exec zsh` on a fish machine is clean too.
+if command -v zsh >/dev/null 2>&1; then
+    # compinit refuses completions from group/other-writable dirs, and Homebrew
+    # ships share/zsh group-writable on many systems -- this is the classic
+    # "zsh compinit: insecure directories" warning.
+    if [ -n "${HOMEBREW_PREFIX:-}" ]; then
+        for d in "$HOMEBREW_PREFIX/share" \
+                 "$HOMEBREW_PREFIX/share/zsh" \
+                 "$HOMEBREW_PREFIX/share/zsh/site-functions"; do
+            [ -d "$d" ] && chmod go-w "$d" 2>/dev/null || true
+        done
+    fi
+    mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh" \
+             "${XDG_STATE_HOME:-$HOME/.local/state}/zsh"
+fi
+
+TARGET_SHELL="$(command -v {{ $shell }} || true)"
+if [ -z "$TARGET_SHELL" ]; then
+    echo "==> {{ $shell }} not found on PATH; leaving the login shell alone" >&2
+    exit 0
+fi
+
+# Read the real login shell from the password database. $SHELL is inherited
+# from whatever launched chezmoi and is routinely stale (e.g. inside tmux).
+case "$(uname -s)" in
+    Darwin) CURRENT_SHELL="$(dscl . -read "/Users/$(id -un)" UserShell 2>/dev/null | awk '{print $2}')" ;;
+    *)      CURRENT_SHELL="$(getent passwd "$(id -un)" | cut -d: -f7)" ;;
+esac
+
+if [ "$CURRENT_SHELL" != "$TARGET_SHELL" ]; then
+    # chsh refuses any shell not listed in /etc/shells
+    if ! grep -Fxq "$TARGET_SHELL" /etc/shells; then
+        echo "==> Adding $TARGET_SHELL to /etc/shells"
+        printf '%s\n' "$TARGET_SHELL" | sudo tee -a /etc/shells >/dev/null
+    fi
+    echo "==> Changing login shell: ${CURRENT_SHELL:-unknown} -> $TARGET_SHELL"
+    sudo chsh -s "$TARGET_SHELL" "$(id -un)"
+    echo "==> Log out and back in for this to take effect."
+else
+    echo "==> Login shell already $TARGET_SHELL"
+fi

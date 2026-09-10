@@ -1,0 +1,7 @@
+# cd to a ghq-managed repository chosen with fzf
+emulate -L zsh
+local root repo
+root=${$(ghq root 2>/dev/null):-$HOME/ghq}
+repo=$(ghq list | fzf --prompt='repo> ' --height=40%) || return
+[[ -n $repo ]] || return
+cd -- "$root/$repo"

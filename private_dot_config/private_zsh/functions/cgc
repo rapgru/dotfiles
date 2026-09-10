@@ -1,0 +1,7 @@
+# Open a ghq-managed repository in VS Code
+emulate -L zsh
+local root repo
+root=${$(ghq root 2>/dev/null):-$HOME/ghq}
+repo=$(ghq list | fzf --prompt='repo> ' --height=40%) || return
+[[ -n $repo ]] || return
+code "$root/$repo"

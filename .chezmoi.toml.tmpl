@@ -4,6 +4,7 @@
 {{- $media := promptBoolOnce . "media" "Install media packages" false -}}
 {{- $k8s := promptBoolOnce . "k8s" "Install k8s packages" false -}}
 {{- $ayuVariant := promptStringOnce . "ayu_variant" "Ayu theme variant (dark, mirage, light)" "mirage" -}}
+{{- $shell := promptStringOnce . "shell" "Login shell (zsh, fish)" "zsh" -}}
 
 [git]
     autoPush = true
@@ -15,3 +16,4 @@
     media = {{ $media }}
     k8s = {{ $k8s }}
     ayu_variant = {{ $ayuVariant | quote }}
+    shell = {{ $shell | quote }}

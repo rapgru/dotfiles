@@ -1,0 +1,7 @@
+# Switch Kubernetes namespace with fzf
+emulate -L zsh
+local ns
+ns=$(kubectl get namespaces -o jsonpath='{.items[*].metadata.name}' \
+       | tr ' ' '\n' | fzf --prompt='k8s ns> ' --height=40%) || return
+[[ -n $ns ]] || return
+kubectl config set-context --current --namespace="$ns"

@@ -1,0 +1,14 @@
+export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+
+# Homebrew lives here rather than in conf.d because .zshrc is only read by
+# interactive shells -- `zsh -c '...'` would otherwise have no brew on PATH.
+# The guard keeps nested shells from prepending PATH a second time.
+if [[ -z ${HOMEBREW_PREFIX-} ]]; then
+    for _brew in /opt/homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew /usr/local/bin/brew; do
+        if [[ -x $_brew ]]; then
+            eval "$("$_brew" shellenv)"
+            break
+        fi
+    done
+    unset _brew
+fi

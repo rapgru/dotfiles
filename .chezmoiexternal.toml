@@ -2,3 +2,12 @@
     type = "git-repo"
     url = "https://github.com/tmux-plugins/tpm.git"
     refreshPeriod = "168h"
+
+# `zinit self-update` runs `git pull --no-stat --ff-only` in this exact
+# directory, so chezmoi's pull and zinit's own updater cannot diverge.
+# Not shallow: zinit reports its version from git tags.
+[".local/share/zinit/zinit.git"]
+    type = "git-repo"
+    url = "https://github.com/zdharma-continuum/zinit.git"
+    refreshPeriod = "168h"
+    pull.args = ["--ff-only", "--no-stat"]

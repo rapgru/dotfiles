@@ -1,0 +1,26 @@
+# Loader only -- the actual configuration lives in conf.d/, mirroring fish.
+# Debug a slow startup with: ZSH_PROFILE=1 ZSH_NO_TMUX=1 zsh -i -c exit
+
+[[ -n ${ZSH_PROFILE-} ]] && zmodload zsh/zprof
+
+typeset -U path fpath PATH FPATH   # dedupe, keeping the first occurrence
+
+ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+if [[ -f $ZINIT_HOME/zinit.zsh ]]; then
+    source "$ZINIT_HOME/zinit.zsh"
+else
+    print -u2 "zinit missing at $ZINIT_HOME -- run 'chezmoi apply' to clone it"
+fi
+
+# Autoloaded functions, mirroring fish's functions/ directory
+fpath=("$ZDOTDIR/functions" $fpath)
+_zfns=("$ZDOTDIR"/functions/*(N.:t))
+(( $#_zfns )) && autoload -Uz -- $_zfns
+unset _zfns
+
+for _frag in "$ZDOTDIR"/conf.d/*.zsh(N.on); do
+    source "$_frag"
+done
+unset _frag
+
+[[ -n ${ZSH_PROFILE-} ]] && zprof

@@ -1,0 +1,3 @@
+{{- if not .gpg }}
+30-gpg-agent.zsh
+{{- end }}
