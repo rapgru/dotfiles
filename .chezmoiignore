@@ -2,7 +2,7 @@ README.md
 
 # macOS packages: ignore on all non-Darwin platforms (Linux/WSL)
 {{ if ne .chezmoi.os "darwin" }}
-run_onchange_12-install-packages-macos.sh*
+run_onchange_14-install-packages-macos.sh*
 {{ end }}
 
 {{ if not .gpg }}
@@ -11,11 +11,11 @@ run_onchange_12-install-packages-gpg.sh*
 {{ end }}
 
 {{ if not .latex }}
-run_onchange_11-install-packages-latex.sh*
+run_onchange_13-install-packages-latex.sh*
 {{ end }}
 
 {{ if not .media }}
-run_onchange_11-install-packages-media.sh*
+run_onchange_15-install-packages-media.sh*
 {{ end }}
 
 {{ if not .k8s }}
