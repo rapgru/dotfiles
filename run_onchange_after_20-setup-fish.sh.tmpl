@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || /opt/homebrew/bin/brew shellenv 2>/dev/null || true)"
+
 # Add Fish to /etc/shells and set as default shell if not already set
 FISH_PATH="$(command -v fish || true)"
 if [ -n "$FISH_PATH" ] && [ "$SHELL" != "$FISH_PATH" ]; then
@@ -9,5 +11,5 @@ if [ -n "$FISH_PATH" ] && [ "$SHELL" != "$FISH_PATH" ]; then
         echo "$FISH_PATH" | sudo tee -a /etc/shells
     fi
     echo "==> Changing default shell to Fish"
-    chsh -s "$FISH_PATH"
+    sudo chsh -s "$FISH_PATH" "$(whoami)"
 fi
