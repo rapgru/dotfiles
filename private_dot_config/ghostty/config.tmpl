@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-{{- $ayuVariant := default "mirage" (index . "ayu_variant") -}}
+{{- $ayuVariant := includeTemplate "ayu-variant" . -}}
 # Font Configuration
 # -----------------------------------------------------------------------------
 font-family = "FiraCode Nerd Font"

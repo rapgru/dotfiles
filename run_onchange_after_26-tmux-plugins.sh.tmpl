@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+
+# Re-run this script whenever the tmux plugin list changes:
+# {{ include "private_dot_config/tmux/tmux.conf.tmpl" | sha256sum }}
+
+{{ template "brew-shellenv.sh" . }}
+
+TPM_DIR="$HOME/.config/tmux/plugins/tpm"
+
+if ! command -v tmux >/dev/null 2>&1; then
+    echo "==> tmux not installed; skipping plugin install"
+    exit 0
+fi
+
+# tpm itself is cloned by .chezmoiexternal.toml
+if [ ! -x "$TPM_DIR/bin/install_plugins" ]; then
+    echo "==> tpm not present at $TPM_DIR; run 'chezmoi apply' to clone it"
+    exit 0
+fi
+
+echo "==> Installing tmux plugins"
+"$TPM_DIR/bin/install_plugins"

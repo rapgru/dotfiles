@@ -6,10 +6,7 @@ set -euo pipefail
 # Desired login shell: {{ $shell }}
 # (re-renders, and therefore re-runs, whenever `shell` changes in chezmoi.toml)
 
-test -x /opt/homebrew/bin/brew && eval "$(/opt/homebrew/bin/brew shellenv)"
-test -x /home/linuxbrew/.linuxbrew/bin/brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-test -x /usr/local/bin/brew && eval "$(/usr/local/bin/brew shellenv)" || true
-
+{{ template "brew-shellenv.sh" . }}
 # zsh housekeeping whenever zsh exists, not only when it is the login shell,
 # so `exec zsh` on a fish machine is clean too.
 if command -v zsh >/dev/null 2>&1; then

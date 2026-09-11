@@ -1,4 +1,4 @@
-{{- $ayuVariant := default "mirage" (index . "ayu_variant") -}}
+{{- $ayuVariant := includeTemplate "ayu-variant" . -}}
 # ~/.config/tmux/tmux.conf
 
 # --- Prefix ---
@@ -39,7 +39,7 @@ set -g history-limit 50000
 bind-key x kill-pane # skip "kill-pane 1? (y/n)" prompt
 set -g detach-on-destroy off  # don't exit from tmux when closing a session
 
-bind-key o display-popup -E -w 80% -h 70% "bash ~/.config/tmux/sesh-connect.sh"
+bind-key o display-popup -E -w 64 -h 18 "bash ~/.config/tmux/sesh-connect.sh"
 
 # --- Plugins ---
 set -g @plugin 'tmux-plugins/tpm'

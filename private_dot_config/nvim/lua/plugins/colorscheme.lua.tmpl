@@ -1,4 +1,4 @@
-{{- $ayuVariant := default "mirage" (index . "ayu_variant") -}}
+{{- $ayuVariant := includeTemplate "ayu-variant" . -}}
 return {
   {
     "Shatur/neovim-ayu",

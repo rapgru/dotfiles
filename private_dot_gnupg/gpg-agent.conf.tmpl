@@ -1,0 +1,20 @@
+{{- /* pinentry differs per OS; hardcoding the macOS path broke Linux silently */ -}}
+{{- $pinentry := "" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $pinentry = or (lookPath "pinentry-mac") (lookPath "pinentry") -}}
+{{-   if not $pinentry -}}
+{{-     $pinentry = eq .chezmoi.arch "arm64" | ternary "/opt/homebrew/bin/pinentry-mac" "/usr/local/bin/pinentry-mac" -}}
+{{-   end -}}
+{{- else -}}
+{{-   $pinentry = or (lookPath "pinentry-curses") (lookPath "pinentry-gtk-2") (lookPath "pinentry-tty") (lookPath "pinentry") -}}
+{{- end -}}
+{{- $line := "" -}}
+{{- if $pinentry -}}
+{{-   $line = printf "pinentry-program %s" $pinentry -}}
+{{- else -}}
+{{-   $line = "# No pinentry found at apply time; gpg-agent uses its built-in default.\n# Install one (brew \"pinentry\") and re-run `chezmoi apply`." -}}
+{{- end -}}
+{{ $line }}
+enable-ssh-support
+default-cache-ttl 60
+max-cache-ttl 120
