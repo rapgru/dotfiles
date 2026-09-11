@@ -1,0 +1,23 @@
+[[ -e /home/rgruber/ghq/git.internal.cloudflight.io/cloudflight/ai-tools/claude-utilities/claude-wrapper/linux-macos ]] && export PATH="$PATH:/home/rgruber/ghq/git.internal.cloudflight.io/cloudflight/ai-tools/claude-utilities/claude-wrapper/linux-macos"
+
+typeset -U path
+
+path=(
+    $HOME/.local/bin
+    $path
+)
+
+{{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
+# WSL: auto-cache Windows PATH entries
+WSL_PATH_CACHE="$HOME/.cache/wsl_win_path"
+if [[ "$PATH" == */mnt/c/* ]]; then
+    mkdir -p "$(dirname "$WSL_PATH_CACHE")"
+    echo "$PATH" | tr ':' '\n' | grep '^/mnt/' > "$WSL_PATH_CACHE"
+elif [[ -f "$WSL_PATH_CACHE" ]]; then
+    while IFS= read -r p; do
+        path+=("$p")
+    done < "$WSL_PATH_CACHE"
+fi
+{{ end -}}
+
+export PATH
