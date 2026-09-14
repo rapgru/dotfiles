@@ -1,0 +1,11 @@
+# These conf.d fragments moved into ~/.zshenv and $ZDOTDIR/.zprofile so that
+# non-interactive shells get them too. chezmoi does not delete files it merely
+# stops managing, so they have to be removed explicitly on machines that already
+# applied the old layout. A stale 00-brew.zsh is the one that actually matters:
+# it re-prepends Homebrew ahead of the mise shims and would shadow the pinned
+# tool versions.
+#
+# Safe to delete this file once every machine has run `chezmoi apply` once.
+.config/zsh/conf.d/00-brew.zsh
+.config/zsh/conf.d/10-elan.zsh
+.config/zsh/conf.d/15-editor.zsh

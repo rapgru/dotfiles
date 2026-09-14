@@ -44,3 +44,9 @@ if (( $+commands[eza] )); then
     zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --icons --color=always $realpath'
     zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --icons --color=always $realpath'
 fi
+
+# compinit is normally deferred to zinit's turbo `atinit` in 20-plugins.zsh, so
+# it is paid for after the first prompt. But that file returns early when zinit
+# is missing, and then nothing ever calls _zsh_compinit -- leaving the shell
+# with no completion system at all. Run it eagerly in that case.
+(( $+functions[zinit] )) || _zsh_compinit

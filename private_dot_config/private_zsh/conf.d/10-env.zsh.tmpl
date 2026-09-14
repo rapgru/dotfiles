@@ -1,23 +1,25 @@
-[[ -e /home/rgruber/ghq/git.internal.cloudflight.io/cloudflight/ai-tools/claude-utilities/claude-wrapper/linux-macos ]] && export PATH="$PATH:/home/rgruber/ghq/git.internal.cloudflight.io/cloudflight/ai-tools/claude-utilities/claude-wrapper/linux-macos"
+# $HOME/.local/bin, Homebrew, the mise shims and elan live in .zshenv instead,
+# so that non-interactive shells get them too. Only interactive-only PATH
+# entries belong here.
 
-typeset -U path
-
-path=(
-    $HOME/.local/bin
-    $path
-)
+_claude_wrapper=$HOME/ghq/git.internal.cloudflight.io/cloudflight/ai-tools/claude-utilities/claude-wrapper/linux-macos
+[[ -d $_claude_wrapper ]] && path+=("$_claude_wrapper")
+unset _claude_wrapper
 
 {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
-# WSL: auto-cache Windows PATH entries
-WSL_PATH_CACHE="$HOME/.cache/wsl_win_path"
-if [[ "$PATH" == */mnt/c/* ]]; then
-    mkdir -p "$(dirname "$WSL_PATH_CACHE")"
-    echo "$PATH" | tr ':' '\n' | grep '^/mnt/' > "$WSL_PATH_CACHE"
-elif [[ -f "$WSL_PATH_CACHE" ]]; then
-    while IFS= read -r p; do
-        path+=("$p")
-    done < "$WSL_PATH_CACHE"
+# WSL: auto-cache Windows PATH entries. Interop only appends them for shells
+# launched by wsl.exe, so a shell started any other way (systemd user unit, an
+# already-running tmux server) replays them from the cache instead.
+_wsl_path_cache="${XDG_CACHE_HOME:-$HOME/.cache}/wsl_win_path"
+if [[ $PATH == */mnt/c/* ]]; then
+    [[ -d ${_wsl_path_cache:h} ]] || mkdir -p "${_wsl_path_cache:h}"
+    print -rl -- ${(s.:.)PATH} | grep '^/mnt/' > "$_wsl_path_cache"
+elif [[ -f $_wsl_path_cache ]]; then
+    while IFS= read -r _wsl_p; do
+        path+=("$_wsl_p")
+    done < "$_wsl_path_cache"
 fi
+unset _wsl_path_cache _wsl_p
 {{ end -}}
 
 export PATH

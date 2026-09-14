@@ -1,14 +1,52 @@
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 
-# Homebrew lives here rather than in conf.d because .zshrc is only read by
-# interactive shells -- `zsh -c '...'` would otherwise have no brew on PATH.
-# The guard keeps nested shells from prepending PATH a second time.
-if [[ -z ${HOMEBREW_PREFIX-} ]]; then
-    for _brew in /opt/homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew /usr/local/bin/brew; do
-        if [[ -x $_brew ]]; then
-            eval "$("$_brew" shellenv)"
-            break
-        fi
-    done
-    unset _brew
-fi
+typeset -U path fpath PATH FPATH   # dedupe, keeping the first occurrence
+
+# Everything a *non-interactive* zsh needs lives here. `.zshrc` -- and therefore
+# conf.d/ -- is not read by `ssh host 'cmd'`, cron, systemd user units or
+# GUI/IDE-launched processes, so anything that must work there belongs in this
+# file. Interactive-only concerns (aliases, keybindings, prompt, completion,
+# gpg-agent) stay in conf.d.
+#
+# _zsh_base_path is deliberately re-runnable: $ZDOTDIR/.zprofile calls it a
+# second time to undo macOS's path_helper. `typeset -U path` keeps the first
+# occurrence, so re-running hoists these back to the front without duplicating.
+_zsh_base_path() {
+    local brew shims
+
+    # The HOMEBREW_PREFIX guard keeps nested shells from re-forking `brew`.
+    if [[ -z ${HOMEBREW_PREFIX-} ]]; then
+        for brew in /opt/homebrew/bin/brew \
+                    /home/linuxbrew/.linuxbrew/bin/brew \
+                    /usr/local/bin/brew; do
+            if [[ -x $brew ]]; then
+                eval "$("$brew" shellenv)"
+                break
+            fi
+        done
+    fi
+    if [[ -n ${HOMEBREW_PREFIX-} ]]; then
+        path=("$HOMEBREW_PREFIX/bin" "$HOMEBREW_PREFIX/sbin" $path)
+    fi
+
+    # Lean. The env file guards its own PATH edit, so sourcing it twice is safe
+    # -- but that guard also means it will not re-hoist after path_helper has
+    # demoted it, hence the explicit prepend.
+    [[ -r $HOME/.elan/env ]] && source "$HOME/.elan/env"
+    [[ -d $HOME/.elan/bin ]] && path=("$HOME/.elan/bin" $path)
+
+    # conf.d/10-mise.zsh runs `mise activate`, which is hook-driven and thus
+    # interactive-only -- without this, `ssh host 'node -v'` gets the system
+    # node rather than the version pinned in ~/.config/mise/config.toml.
+    # `mise activate --shims zsh` emits exactly this one prepend, so do it
+    # directly rather than forking mise on every single zsh start.
+    shims="${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims"
+    [[ -d $shims ]] && path=("$shims" $path)
+
+    [[ -d $HOME/.local/bin ]] && path=("$HOME/.local/bin" $path)
+}
+_zsh_base_path
+
+# nvim comes from Homebrew, which the block above just put on PATH. Without
+# this, `ssh -t host 'git commit'` and `crontab -e` fall back to vi.
+export EDITOR="nvim"

@@ -29,6 +29,19 @@ It mirrors the fish layout: numbered fragments in `conf.d/` and one file per fun
 the plugins zinit installs under `~/.local/share/zinit/plugins` are *not* tracked, same arrangement
 as lazy.nvim below.
 
+Which file something belongs in:
+
+- **`~/.zshenv`** — read by *every* zsh, including `ssh host 'cmd'`, cron, systemd user units and
+  anything an IDE spawns. PATH (Homebrew, the mise shims, `~/.local/bin`, elan) and `EDITOR` live
+  here, because none of those contexts ever read `.zshrc`. `mise activate` in `conf.d/` is
+  hook-driven and interactive-only, so the shims directory is what makes the pinned python/node/go
+  versions work everywhere else.
+- **`$ZDOTDIR/.zprofile`** — login shells, read *after* `/etc/zprofile`. Its only job is to re-run
+  `_zsh_base_path`, undoing macOS's `path_helper`, which otherwise demotes everything `.zshenv` set
+  up to behind `/usr/bin`.
+- **`$ZDOTDIR/.zshrc` → `conf.d/`** — interactive-only concerns: aliases, keybindings, history,
+  options, completion, prompt, plugins, gpg-agent, tmux auto-attach.
+
 Debug a slow startup with `ZSH_PROFILE=1 ZSH_NO_TMUX=1 zsh -i -c exit`. `ZSH_NO_TMUX=1` skips the
 tmux auto-attach.
 

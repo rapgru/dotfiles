@@ -1,0 +1,14 @@
+# Login shells only, and read *after* /etc/zprofile -- which is the whole point.
+#
+# macOS's /etc/zprofile runs `path_helper`, which rebuilds PATH from /etc/paths
+# and /etc/paths.d and appends whatever was already there. That demotes
+# everything .zshenv just set up (Homebrew, the mise shims, ~/.local/bin) to
+# behind /usr/bin, so system python/git quietly shadow the managed ones.
+#
+# Re-running _zsh_base_path puts the order back. `typeset -U path` keeps the
+# first occurrence, so this re-hoists rather than duplicating, and it costs no
+# `brew` fork because HOMEBREW_PREFIX is already exported by now.
+#
+# This replaces the old conf.d/00-brew.zsh, which only fixed interactive shells;
+# `zsh -lc 'cmd'` is a login shell too and never reaches .zshrc.
+(( $+functions[_zsh_base_path] )) && _zsh_base_path
