@@ -22,3 +22,34 @@ icon = ""
 # reattaching later does not add another pane. `sesh connect --command ...`
 # replaces it entirely and you get no split.
 startup_command = "tmux split-window -h -d -l 30% -c '#{pane_current_path}' && nvim"
+
+# Adds a k9s window on top of what the wildcard above already does, rather than
+# replacing it. The two do not collide because they are resolved separately:
+# `windows` comes from the connection strategy (config beats config_wildcard),
+# while the startup command is a second lookup that falls through to the
+# wildcard -- this path still matches ~/ghq/**, and sesh home-expands both the
+# pattern and the path before comparing. So window 1 gets the usual nvim split
+# and k9s waits in window 2. Setting startup_command here would override the
+# split instead of adding to it, which is why it is absent.
+#
+# sesh creates the extra windows first, then wraps back to window 1 before
+# sending the startup command, so you land on nvim and not on k9s.
+#
+# The name must be the one sesh would derive on its own -- the basename of the
+# git root, because git_dir_length defaults to 1 -- otherwise the picker lists
+# this project twice, once from here and once from zoxide.
+#
+# No icon on purpose: a config session without one falls back to the icon of the
+# wildcard its path matches, so this keeps the ghq glyph.
+[[session]]
+name = "gitlab-ci-infrastructure"
+path = "~/ghq/git.internal.cloudflight.io/cloudflight/managedservice/gitlab-ci-infrastructure"
+windows = ["k9s"]
+
+# Referenced by name from `windows` above. startup_script is valid only on
+# [[window]] -- [[session]] and [[wildcard]] are additionalProperties:false and
+# reject it -- and it is sent with send-keys like startup_command, so it is a
+# shell line, not a path: "k9s -n kube-system" would work here too.
+[[window]]
+name = "k9s"
+startup_script = "k9s"
