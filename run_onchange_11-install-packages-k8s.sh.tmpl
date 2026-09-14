@@ -10,6 +10,9 @@ exit 0
 
 brew bundle --file=/dev/stdin <<EOF
 brew "azure-cli"
+# Required by the Shift-X plugin in .config/k9s/plugins/cdebug.yaml, which is
+# silently dead without it -- k9s just flashes the shell exiting non-zero.
+brew "cdebug"
 brew "glab"
 brew "k9s"
 brew "opentofu"

@@ -1,0 +1,102 @@
+# cdebug variant of k9s' own plugins/debug-container.yaml.
+#
+# `kubectl debug` gives you a *sidecar*: a second container with its own
+# filesystem, sharing only the process/network namespaces. Your tools are there
+# but the target's files are not, so you end up spelunking /proc/1/root by hand.
+# cdebug starts the same kind of ephemeral container, then chroots into the
+# target's rootfs and symlinks its own /bin into it -- so the shell you land in
+# *is* the target container's filesystem, with the toolkit's binaries on PATH.
+# That is the whole reason to prefer it here.
+#
+# Shift-X rather than Shift-D so this can coexist with the upstream debug
+# plugin. k9s itself already binds A C F J K L N O P R S U V.
+#
+# Requires: cdebug on PATH (installed by run_onchange_11-install-packages-k8s)
+# and a cluster with the EphemeralContainers API (GA since k8s 1.25).
+plugins:
+  # Container scope gets NAMESPACE + POD + NAME (the container), which is the
+  # only scope where cdebug can be pointed at one specific container.
+  cdebug:
+    shortCut: Shift-X
+    description: cdebug shell
+    dangerous: true
+    scopes:
+      - containers
+    command: bash
+    background: false
+    confirm: true
+    inputs:
+      - name: image
+        label: Toolkit image
+        type: dropdown
+        required: true
+        default: nixery.dev/shell/coreutils/findutils/gnugrep/curl/jq/procps/iproute2/dnsutils
+        options:
+          # nixery composes an image from the path segments, so this is the one
+          # option you can extend without rebuilding anything. cdebug also
+          # special-cases "nixery" in the image name and links /nix into the
+          # target, without which none of these binaries would resolve.
+          #
+          # That special case is destructive: if the target already has a /nix
+          # with a different inode, cdebug `rm -rf`s it before linking. Harmless
+          # for ordinary app images, which have no /nix -- but pick netshoot or
+          # busybox when debugging anything Nix-based.
+          - nixery.dev/shell/coreutils/findutils/gnugrep/curl/jq/procps/iproute2/dnsutils
+          - nicolaka/netshoot:v0.15
+          - busybox:musl
+      - name: privileged
+        label: Privileged
+        type: bool
+        required: true
+        default: "false"
+    args:
+      - -c
+      # cdebug sets SetInterspersed(false), so every flag has to come before the
+      # pod/container target -- moving them after it makes them positional args.
+      #
+      # Note there is no --rm equivalent here: an ephemeral container stays in
+      # the pod spec until the pod is replaced. Expect to see it in `describe`.
+      - >-
+        cdebug exec -it
+        --kubeconfig-context "$CONTEXT"
+        --namespace "$NAMESPACE"
+        --image "$INPUT_IMAGE"
+        $([ "$INPUT_PRIVILEGED" = "true" ] && echo "--privileged")
+        pod/$POD/$NAME
+
+  # Pod scope has no POD var -- NAME is the pod. Omitting the container makes
+  # cdebug pick the target itself, which is what you want for single-container
+  # pods and saves a drill-down.
+  cdebug-pod:
+    shortCut: Shift-X
+    description: cdebug shell
+    dangerous: true
+    scopes:
+      - pods
+    command: bash
+    background: false
+    confirm: true
+    inputs:
+      - name: image
+        label: Toolkit image
+        type: dropdown
+        required: true
+        default: nixery.dev/shell/coreutils/findutils/gnugrep/curl/jq/procps/iproute2/dnsutils
+        options:
+          - nixery.dev/shell/coreutils/findutils/gnugrep/curl/jq/procps/iproute2/dnsutils
+          - nicolaka/netshoot:v0.15
+          - busybox:musl
+      - name: privileged
+        label: Privileged
+        type: bool
+        required: true
+        default: "false"
+    args:
+      - -c
+      - >-
+        cdebug exec -it
+        --kubeconfig-context "$CONTEXT"
+        --namespace "$NAMESPACE"
+        --image "$INPUT_IMAGE"
+        $([ "$INPUT_PRIVILEGED" = "true" ] && echo "--privileged")
+        pod/$NAME
