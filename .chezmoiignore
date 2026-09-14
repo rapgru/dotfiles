@@ -1,4 +1,5 @@
 README.md
+AGENTS.md
 
 {{ if not .gpg }}
 .gnupg
