@@ -7,4 +7,18 @@ icon = "󱅙"
 [[wildcard]]
 pattern = "~/ghq/**"
 icon = ""
-startup_command = "nvim"
+# sesh delivers startup_command with `tmux send-keys`, so this is one line typed
+# into the new session's only pane and run by zsh -- shell operators work, and
+# `&&` is what keeps nvim in the original (70%) pane.
+#
+# -d leaves the focus where it is; without it the new pane becomes active and
+# you land in the shell instead of the editor. -c is needed because split-window
+# inherits the session's start directory, not the pane's.
+#
+# -h splits left/right, which is the point on a wide monitor: nvim keeps 70% of
+# the width and the shell sits beside it. Swap -h for -v to stack them instead.
+#
+# Only runs when the session is created (sesh gates it on connection.New), so
+# reattaching later does not add another pane. `sesh connect --command ...`
+# replaces it entirely and you get no split.
+startup_command = "tmux split-window -h -d -l 30% -c '#{pane_current_path}' && nvim"
