@@ -1,5 +1,6 @@
 README.md
 AGENTS.md
+plans
 
 {{ if not .gpg }}
 .gnupg

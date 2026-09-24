@@ -6,11 +6,11 @@ alias dum2='du --max-depth=2'
 # ls and cat are deliberately not shadowed -- eza and bat differ enough in
 # flag handling that aliasing them makes pasted commands behave oddly
 if (( $+commands[eza] )); then
-    alias l='eza --icons'
-    alias la='eza -a --icons'
-    alias ll='eza -la --icons --git'
-    alias lt='eza -T --icons --level=2'
+    alias l='eza --icons=auto'
+    alias la='eza -a --icons=auto'
+    alias ll='eza -la --icons=auto --git'
+    alias lt='eza -T --icons=auto --level=2'
 fi
 
-alias fr='exec zsh'
 alias ff='exec fish'
+alias zq='zoxide query'
