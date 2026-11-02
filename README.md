@@ -7,7 +7,7 @@ For linux machines, this works best on Ubuntu >= 26.04
 ## New machine setup
 
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply rapgru
+sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply rapgru
 ```
 
 ## Shells
