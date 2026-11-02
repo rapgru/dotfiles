@@ -6,6 +6,8 @@ _claude_wrapper=$HOME/ghq/git.internal.cloudflight.io/cloudflight/ai-tools/claud
 [[ -d $_claude_wrapper ]] && path+=("$_claude_wrapper")
 unset _claude_wrapper
 
+path+=("$HOME/.local/bin")
+
 {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
 # WSL: auto-cache Windows PATH entries. Interop only appends them for shells
 # launched by wsl.exe, so a shell started any other way (systemd user unit, an
