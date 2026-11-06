@@ -8,6 +8,7 @@ unset _claude_wrapper
 
 path+=("$HOME/.local/bin")
 
+{{ if eq .chezmoi.os "linux" }}
 {{ if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
 # WSL: auto-cache Windows PATH entries. Interop only appends them for shells
 # launched by wsl.exe, so a shell started any other way (systemd user unit, an
@@ -23,5 +24,6 @@ elif [[ -f $_wsl_path_cache ]]; then
 fi
 unset _wsl_path_cache _wsl_p
 {{ end -}}
+{{ end }}
 
 export PATH
