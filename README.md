@@ -6,8 +6,18 @@ For linux machines, this works best on Ubuntu >= 26.04
 
 ## New machine setup
 
+Install `chezmoi`
+
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply rapgru
+mkdir -p ~/.local/bin
+sh -c "$(curl -fsLS get.chezmoi.io)" -- -b ~/.local/bin
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Then apply the config
+
+```bash
+chezmoi init --apply rapgru/dotfiles
 ```
 
 ## Shells

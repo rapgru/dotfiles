@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Re-run this script whenever the global mise config changes:
-# {{ include "private_dot_config/mise/config.toml.tmpl" | sha256sum }}
+# {{ include "dot_config/mise/config.toml.tmpl" | sha256sum }}
 
 {{ template "brew-shellenv.sh" . }}
 

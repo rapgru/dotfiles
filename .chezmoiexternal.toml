@@ -11,3 +11,8 @@
     url = "https://github.com/zdharma-continuum/zinit.git"
     refreshPeriod = "168h"
     pull.args = ["--ff-only", "--no-stat"]
+
+[".local/bin/wslopen"]
+    type = "file"
+    url = "https://github.com/mkletri/wslopen/releases/download/v0.1.0/wslopen-x86_64-unknown-linux-musl"
+    executable = true

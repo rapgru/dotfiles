@@ -59,6 +59,10 @@ set -g mouse on
 # Increase scrollback buffer
 set -g history-limit 50000
 
+# --- Clipboard ---
+
+set-option -g set-clipboard external
+
 # --- Sesh ---
 bind-key x kill-pane # skip "kill-pane 1? (y/n)" prompt
 set -g detach-on-destroy off  # don't exit from tmux when closing a session
@@ -85,6 +89,10 @@ set -g @minimal-tmux-fg "#5c6166"
 set -g @minimal-tmux-bg "#73d0ff"
 set -g @minimal-tmux-fg "#212733"
 {{ end -}}
+
+set -g @minimal-tmux-status-right '%H:%M  #( ~/.config/tmux/status-context.sh )'
+set -g status-interval 15
+set -g status-right-length 120
 
 # ⚠️ Keep this line at the very bottom
 run '~/.config/tmux/plugins/tpm/tpm'

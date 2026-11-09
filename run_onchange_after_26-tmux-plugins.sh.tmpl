@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Re-run this script whenever the tmux plugin list changes:
-# {{ include "private_dot_config/tmux/tmux.conf.tmpl" | sha256sum }}
+# {{ include "dot_config/tmux/tmux.conf.tmpl" | sha256sum }}
 
 {{ template "brew-shellenv.sh" . }}
 
